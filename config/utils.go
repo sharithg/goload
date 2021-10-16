@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+const CONFIG_FILE_NAME = ".goload.json"
+
 type GoloadConfig struct {
 	ImageId string `json:"imageId"`
 }
@@ -15,7 +17,7 @@ func GetDockerImageName() string {
 
 	var goloadConfig GoloadConfig
 
-	jsonFile, err := os.Open(".config.json")
+	jsonFile, err := os.Open(CONFIG_FILE_NAME)
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	json.Unmarshal(byteValue, &goloadConfig)
@@ -30,7 +32,7 @@ func GetDockerImageName() string {
 }
 
 func DoesAttributeAndFileExist(name string) bool {
-	_, err := os.Stat(".config.json")
+	_, err := os.Stat(CONFIG_FILE_NAME)
 
 	if err != nil {
 		return false
@@ -53,5 +55,5 @@ func WriteDockerImageName(name string) {
 
 	file, _ := json.MarshalIndent(data, "", " ")
 
-	_ = ioutil.WriteFile(".config.json", file, 0644)
+	_ = ioutil.WriteFile(CONFIG_FILE_NAME, file, 0644)
 }
