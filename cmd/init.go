@@ -3,7 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"goload/config"
 	"goload/docker"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -22,16 +24,23 @@ var initCmd = &cobra.Command{
 		if nameFlag == "" {
 			return errors.New("requires a name argument")
 		}
+
 		// if len(args) < 1 {
 		return nil
 		// }
 
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
 		nameFlag, _ := cmd.Flags().GetString("name")
-		docker.BuildDocker(nameFlag)
-		fmt.Print(args)
+
+		if config.DoesAttributeAndFileExist("imageId") {
+			fmt.Fprintln(os.Stderr, "project already exists")
+
+		}
+
+		imageId := docker.BuildDocker(nameFlag)
+		config.WriteDockerImageName(imageId)
+		// config.GetDockerImageName()
 	},
 }
 

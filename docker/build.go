@@ -6,12 +6,14 @@ import (
 	"os/exec"
 )
 
-func BuildDocker(name string) {
+func BuildDocker(name string) string {
 
 	dockerImageName := name + "-" + RandomId(10)
 	dockerArgs := "docker build -f ./testdocker/Dockerfile -t " + dockerImageName + " ."
 
 	fmt.Print(dockerArgs + "\n")
+
+	fmt.Println("Building docker image...")
 
 	dockerExec := exec.Command("/bin/sh", "-c", dockerArgs)
 
@@ -24,8 +26,10 @@ func BuildDocker(name string) {
 	err := dockerExec.Run()
 
 	if err != nil {
-		fmt.Printf("%s", err)
+		panic(fmt.Sprintf("%s", err))
 	}
 
 	fmt.Println("out:", outb.String(), "err:", errb.String())
+
+	return dockerImageName
 }
