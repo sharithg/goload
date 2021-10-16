@@ -4,7 +4,7 @@ import (
 	"math/rand"
 )
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyz")
 
 func RandomId(n int) string {
 	b := make([]rune, n)
