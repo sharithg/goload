@@ -7,4 +7,4 @@ goload run: Run a existing project.
 
 - `R` `--replicas` (Required) Number of replicas
 
-goload rebuild
+goload rebuild: Rebuild the docker image if changes were made.
