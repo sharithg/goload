@@ -1,15 +1,13 @@
-package main
+package loadbalancer
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -159,19 +157,18 @@ func healthCheck() {
 
 var serverPool ServerPool
 
-func runBackend() {
-	var serverList string
-	var port int
-	flag.StringVar(&serverList, "backends", "", "Load balanced backends, use commas to separate")
-	flag.IntVar(&port, "port", 3030, "Port to serve")
-	flag.Parse()
+func RunBackend(serverList []string) {
+	port := 5800
+	// flag.StringVar(&serverList, "backends", "", "Load balanced backends, use commas to separate")
+	// flag.IntVar(&port, "port", 3030, "Port to serve")
+	// flag.Parse()
 
 	if len(serverList) == 0 {
 		log.Fatal("Please provide one or more backends to load balance")
 	}
 
 	// parse servers
-	tokens := strings.Split(serverList, ",")
+	tokens := serverList
 	for _, tok := range tokens {
 		serverUrl, err := url.Parse(tok)
 		if err != nil {
