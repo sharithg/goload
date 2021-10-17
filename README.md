@@ -4,3 +4,4 @@ Usually creating a load balancer takes a lot of configuration with tools such as
 
 ## Resources
 [Commands](https://github.com/sharithg/goload/blob/master/COMMANDS.md)
+[Todos](https://github.com/sharithg/goload/blob/master/TODO.md)
