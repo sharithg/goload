@@ -10,9 +10,7 @@ import (
 func BuildDocker(name string) string {
 
 	dockerImageName := name + "-" + RandomId(10)
-	dockerArgs := "docker build -f ./testdocker/Dockerfile -t " + dockerImageName + " ."
-
-	fmt.Print(dockerArgs + "\n")
+	dockerArgs := fmt.Sprintf("docker build -f ./testdocker/Dockerfile -t %s ./testdocker", dockerImageName)
 
 	fmt.Println("Building docker image...")
 
