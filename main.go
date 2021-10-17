@@ -28,15 +28,18 @@ func cleanup() {
 			wg.Done()
 		}(element)
 	}
-
 	wg.Wait()
 }
 
 func main() {
+	// create a go channel to handle the SIGTERM signal (^C)
 	c := make(chan os.Signal)
+
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
 	go func() {
 		<-c
+		// run the cleanup when reciving the channel
 		cleanup()
 		os.Exit(1)
 	}()
