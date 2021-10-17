@@ -6,13 +6,18 @@ Usually creating a load balancer takes a lot of configuration with tools such as
 
 ## Usage
 
-Create a new project:
-`goload init --name mynewproject`
+### Create a new project:
 
-Run a load balancer with 4 replicas:
+`goload init --name mynewproject`</br>
+or specify a directory:</br>
+`goload init --name mynewproject --dir ./mynodeproject`
+
+### Run a load balancer with 4 replicas:
+
 `goload run --replicas 4`
 
-Rebuild when changes are made:
+### Rebuild when changes are made:
+
 `goload rebuild`
 
 ## Resources
