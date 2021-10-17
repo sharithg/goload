@@ -25,9 +25,7 @@ var initCmd = &cobra.Command{
 			return errors.New("requires a name argument")
 		}
 
-		// if len(args) < 1 {
 		return nil
-		// }
 
 	},
 	Run: func(cmd *cobra.Command, args []string) {

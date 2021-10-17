@@ -3,8 +3,11 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"goload/config"
 	"goload/docker"
+	"goload/globals"
 	"goload/loadbalancer"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,12 +26,24 @@ var runCmd = &cobra.Command{
 			return errors.New("requires a replicas argument")
 		}
 
+		_, err := strconv.Atoi(replicasFlag)
+		if err != nil {
+			return errors.New("replicasFlag must be a integer")
+		}
+
 		return nil
 
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args)
-		serverList := docker.RunMultipleDocker()
+		replicasFlag, _ := cmd.Flags().GetString("replicas")
+		serverList := []string{}
+		imageId := config.GetDockerImageName()
+		numberOfReplicas, _ := strconv.Atoi(replicasFlag)
+		portList := docker.RunMultipleDocker(numberOfReplicas)
+		for _, port := range portList {
+			serverList = append(serverList, fmt.Sprintf("http://localhost:%s", port))
+			globals.RUNNING_IDS = append(globals.RUNNING_IDS, fmt.Sprintf("%s-%s", imageId, port))
+		}
 		loadbalancer.RunBackend(serverList)
 		// config.GetDockerImageName()
 	},

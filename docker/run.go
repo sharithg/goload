@@ -6,6 +6,7 @@ import (
 	"goload/config"
 	"os"
 	"os/exec"
+	"sync"
 )
 
 func RunDocker(port int) {
@@ -14,9 +15,7 @@ func RunDocker(port int) {
 
 	imageId := config.GetDockerImageName()
 
-	dockerCmd := fmt.Sprintf("docker run -p %d:6000 -d %s", port, imageId)
-
-	fmt.Println(dockerCmd)
+	dockerCmd := fmt.Sprintf("docker run -p %d:6000 -d --name %s %s", port, fmt.Sprintf("%s-%d", imageId, port), imageId)
 
 	dockerExec := exec.Command("/bin/sh", "-c", dockerCmd)
 
@@ -28,25 +27,26 @@ func RunDocker(port int) {
 	// handle it here
 	err := dockerExec.Run()
 
-	fmt.Println("Ran this")
-
 	if err != nil {
 		fmt.Println("out:", outb.String(), "err:", errb.String())
 		panic(fmt.Sprintf("%s", err))
 	}
 }
 
-func RunMultipleDocker() []string {
-	// var wg sync.WaitGroup
+func RunMultipleDocker(numberOfPorts int) []string {
+	var wg sync.WaitGroup
 	startPort := 3010
-	numPorts := 5
+	numPorts := numberOfPorts
 	output := []string{}
-	// wg.Add(5)
+	wg.Add(numPorts)
 	for i := startPort; i <= startPort+numPorts-1; i++ {
-		RunDocker(i)
-		output = append(output, fmt.Sprintf("http://localhost:%d", i))
+		go func(portNum int) {
+			RunDocker(portNum)
+			output = append(output, fmt.Sprint(portNum))
+			wg.Done()
+		}(i)
 	}
-	// wg.Wait()
-	fmt.Println("Ran multiple")
+	wg.Wait()
+	fmt.Println(output)
 	return output
 }
