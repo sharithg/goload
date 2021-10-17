@@ -11,8 +11,6 @@ import (
 
 func RunDocker(port int) {
 
-	// defer wg.Done()
-
 	imageId := config.GetDockerImageName()
 
 	dockerCmd := fmt.Sprintf("docker run -p %d:6000 -d --name %s %s", port, fmt.Sprintf("%s-%d", imageId, port), imageId)
@@ -23,8 +21,6 @@ func RunDocker(port int) {
 	dockerExec.Stdout = os.Stdout
 	dockerExec.Stderr = os.Stderr
 
-	// if there is an error with our execution
-	// handle it here
 	err := dockerExec.Run()
 
 	if err != nil {

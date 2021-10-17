@@ -1,8 +1,10 @@
-goload init
+goload init: Initialize a goload project.
 
 - `-N` `--name` (Required) Name of this project
-- `-F` `--file` (Optional) Specify Dockerfile or defaults to Dockerfile
+- `-D` `--dir` (Optional) Specify project directory containing the Dockerfile
 
-goload run
+goload run: Run a existing project.
 
 - `R` `--replicas` (Required) Number of replicas
+
+goload rebuild

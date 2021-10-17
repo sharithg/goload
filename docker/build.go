@@ -7,6 +7,7 @@ import (
 	"os/exec"
 )
 
+// Builds a docker image given a name
 func BuildDocker(name string) string {
 
 	dockerImageName := name + "-" + RandomId(10)

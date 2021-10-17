@@ -12,6 +12,7 @@ import (
 )
 
 var name string
+var projectDir string
 
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -30,12 +31,22 @@ var initCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		nameFlag, _ := cmd.Flags().GetString("name")
+		projectDirFlag, _ := cmd.Flags().GetString("dir")
+
+		if projectDirFlag != "" {
+			exists, err := PathExits(projectDirFlag)
+
+			if err != nil || !exists {
+				errMsg := fmt.Sprintf("%s: no such directory", projectDirFlag)
+				fmt.Fprintln(os.Stderr, errMsg)
+				os.Exit(1)
+			}
+		}
 
 		if config.DoesAttributeAndFileExist("imageId") {
 			fmt.Fprintln(os.Stderr, "project already exists")
-
+			os.Exit(1)
 		}
-
 		imageId := docker.BuildDocker(nameFlag)
 		config.WriteDockerImageName(imageId)
 		// config.GetDockerImageName()
@@ -48,6 +59,8 @@ func init() {
 	initCmd.PersistentFlags().StringVar(&name, "name", "", "name of the project")
 	viper.BindPFlag("name", initCmd.PersistentFlags().Lookup("name"))
 
+	initCmd.PersistentFlags().StringVar(&projectDir, "dir", "", "project directory, will default to current directory")
+	viper.BindPFlag("dir", initCmd.PersistentFlags().Lookup("dir"))
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// oddCmd.PersistentFlags().String("foo", "", "A help for foo")
