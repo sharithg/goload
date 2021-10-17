@@ -4,14 +4,23 @@ import (
 	"bytes"
 	"fmt"
 	"goload/config"
+	"goload/utils"
 	"os/exec"
+	"path/filepath"
 )
 
 // Builds a docker image given a name
-func BuildDocker(name string) string {
+func BuildDocker(projectDir string, dockerImageName string) (string, string) {
 
-	dockerImageName := name + "-" + RandomId(10)
-	dockerArgs := fmt.Sprintf("docker build -f ./testdocker/Dockerfile -t %s ./testdocker", dockerImageName)
+	dockerBuildDir := "."
+	dockerFileBuildPath := ""
+
+	if projectDir != "" {
+		dockerBuildDir = projectDir
+		dockerFileBuildPath = fmt.Sprintf("-f %s", filepath.Join(projectDir, "Dockerfile"))
+	}
+
+	dockerArgs := fmt.Sprintf("docker build %s -t %s %s", dockerFileBuildPath, dockerImageName, dockerBuildDir)
 
 	fmt.Println("Building docker image...")
 
@@ -26,18 +35,22 @@ func BuildDocker(name string) string {
 	err := dockerExec.Run()
 
 	if err != nil {
-		panic(fmt.Sprintf("%s", err))
+		utils.FatalError(errb.String())
 	}
 
 	fmt.Println("out:", outb.String(), "err:", errb.String())
 
-	return dockerImageName
+	return dockerImageName, projectDir
 }
 
 func RebuildDocker() string {
 
 	dockerImageName := config.GetDockerImageName()
-	dockerArgs := fmt.Sprintf("docker build -f ./testdocker/Dockerfile -t %s ./testdocker", dockerImageName)
+	projectDir := config.GetProjectDir()
+
+	dockerfilePath := filepath.Join(projectDir, "Dockerfile")
+
+	dockerArgs := fmt.Sprintf("docker build -f %s -t %s %s", dockerfilePath, dockerImageName, projectDir)
 
 	fmt.Print(dockerArgs + "\n")
 

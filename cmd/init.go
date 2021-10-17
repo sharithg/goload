@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"goload/config"
 	"goload/docker"
+	"goload/utils"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -38,8 +39,7 @@ var initCmd = &cobra.Command{
 
 			if err != nil || !exists {
 				errMsg := fmt.Sprintf("%s: no such directory", projectDirFlag)
-				fmt.Fprintln(os.Stderr, errMsg)
-				os.Exit(1)
+				utils.FatalError(errMsg)
 			}
 		}
 
@@ -47,8 +47,8 @@ var initCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, "project already exists")
 			os.Exit(1)
 		}
-		imageId := docker.BuildDocker(nameFlag)
-		config.WriteDockerImageName(imageId)
+		dockerImageName, projectDir := docker.BuildDocker(projectDirFlag, nameFlag)
+		config.WriteInitialConfig(dockerImageName, projectDir)
 		// config.GetDockerImageName()
 	},
 }

@@ -1,8 +1,15 @@
-package docker
+package utils
 
 import (
+	"fmt"
 	"math/rand"
+	"os"
 )
+
+func FatalError(message string) {
+	fmt.Fprintln(os.Stderr, message)
+	os.Exit(1)
+}
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyz")
 
