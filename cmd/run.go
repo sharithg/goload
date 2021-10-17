@@ -52,7 +52,7 @@ var runCmd = &cobra.Command{
 func init() {
 
 	// Here you will define your flags and configuration settings.
-	runCmd.PersistentFlags().StringVar(&replicas, "replicas", "", "number of replicas to balance with")
+	runCmd.PersistentFlags().StringVarP(&replicas, "replicas", "r", "", "number of replicas to balance with")
 	viper.BindPFlag("replicas", runCmd.PersistentFlags().Lookup("replicas"))
 
 	rootCmd.AddCommand(runCmd)

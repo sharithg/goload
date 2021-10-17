@@ -56,10 +56,10 @@ var initCmd = &cobra.Command{
 func init() {
 
 	// Here you will define your flags and configuration settings.
-	initCmd.PersistentFlags().StringVar(&name, "name", "", "name of the project")
+	initCmd.PersistentFlags().StringVarP(&name, "name", "n", "", "name of the project")
 	viper.BindPFlag("name", initCmd.PersistentFlags().Lookup("name"))
 
-	initCmd.PersistentFlags().StringVar(&projectDir, "dir", "", "project directory, will default to current directory")
+	initCmd.PersistentFlags().StringVarP(&projectDir, "dir", "d", "", "project directory, will default to current directory")
 	viper.BindPFlag("dir", initCmd.PersistentFlags().Lookup("dir"))
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
