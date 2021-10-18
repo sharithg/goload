@@ -7,6 +7,7 @@ import (
 	"os/exec"
 )
 
+// cleanup function which stops an individual docker container given a id
 func StopDocker(id string) {
 
 	// defer wg.Done()
@@ -19,8 +20,6 @@ func StopDocker(id string) {
 	dockerExec.Stdout = os.Stdout
 	dockerExec.Stderr = os.Stderr
 
-	// if there is an error with our execution
-	// handle it here
 	err := dockerExec.Run()
 
 	if err != nil {

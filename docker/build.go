@@ -15,25 +15,27 @@ func BuildDocker(projectDir string, dockerImageName string) (string, string) {
 	dockerBuildDir := "."
 	dockerFileBuildPath := ""
 
+	// if the project dir is not empty update params to use this directory
 	if projectDir != "" {
 		dockerBuildDir = projectDir
 		dockerFileBuildPath = fmt.Sprintf("-f %s", filepath.Join(projectDir, "Dockerfile"))
 	}
 
+	// construct docker command
 	dockerArgs := fmt.Sprintf("docker build %s -t %s %s", dockerFileBuildPath, dockerImageName, dockerBuildDir)
 
 	fmt.Println("Building docker image...")
 
+	// exec this command
 	dockerExec := exec.Command("/bin/sh", "-c", dockerArgs)
 
 	var outb, errb bytes.Buffer
 	dockerExec.Stdout = &outb
 	dockerExec.Stderr = &errb
 
-	// if there is an error with our execution
-	// handle it here
 	err := dockerExec.Run()
 
+	// exit the process if there was an error
 	if err != nil {
 		utils.FatalError(errb.String())
 	}
@@ -43,6 +45,7 @@ func BuildDocker(projectDir string, dockerImageName string) (string, string) {
 	return dockerImageName, projectDir
 }
 
+// rebuilds a existing docker image
 func RebuildDocker() string {
 
 	dockerImageName := config.GetDockerImageName()

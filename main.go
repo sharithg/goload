@@ -18,11 +18,12 @@ func cleanup() {
 
 	runningIdsLength := len(globals.RUNNING_IDS)
 
+	// create a waitgroup for the number of running containers
 	wg.Add(runningIdsLength)
 
 	for _, element := range globals.RUNNING_IDS {
-		// index is the index where we are
-		// element is the element from someSlice for where we are
+
+		// concurrently stop the containers
 		go func(elem string) {
 			docker.StopDocker(elem)
 			wg.Done()
@@ -37,6 +38,7 @@ func main() {
 
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
+	// attach a go channel to listen for SIGTERM
 	go func() {
 		<-c
 		// run the cleanup when reciving the channel

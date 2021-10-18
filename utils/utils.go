@@ -13,6 +13,7 @@ func FatalError(message string) {
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyz")
 
+// utility function to create a random id given a length
 func RandomId(n int) string {
 	b := make([]rune, n)
 	for i := range b {

@@ -18,12 +18,15 @@ type GoloadConfig struct {
 
 var ProjectDirectoryPath = ""
 
+// get the image name in the project directory
 func GetDockerImageName() string {
 
 	var goloadConfig GoloadConfig
 
+	// open the json file
 	jsonFile, err := os.Open(filepath.Join(ProjectDirectoryPath, CONFIG_FILE_NAME))
 
+	// read bytes and unmarshall
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	json.Unmarshal(byteValue, &goloadConfig)
 
@@ -33,9 +36,11 @@ func GetDockerImageName() string {
 
 	defer jsonFile.Close()
 
+	// return the image name
 	return goloadConfig.ImageId
 }
 
+// check if a attribute exists and that the config file exists
 func DoesAttributeAndFileExist(projectDir string, name string) bool {
 	_, err := os.Stat(filepath.Join(projectDir, CONFIG_FILE_NAME))
 
@@ -48,12 +53,14 @@ func DoesAttributeAndFileExist(projectDir string, name string) bool {
 		return false
 	}
 
+	// set the global ProjectDirectoryPath
 	ProjectDirectoryPath = projectDir
 
 	// if image name exists attribute and file exist
 	return GetDockerImageName() != ""
 }
 
+// write the initial goload config file
 func WriteInitialConfig(name string, projectDir string) {
 	dockerImageName := name + "-" + utils.RandomId(10)
 
@@ -66,10 +73,11 @@ func WriteInitialConfig(name string, projectDir string) {
 	ProjectDirectoryPath = projectDir
 }
 
+// get the current project directory
 func GetProjectDir() string {
 	var goloadConfig GoloadConfig
 
-	jsonFile, err := os.Open(CONFIG_FILE_NAME)
+	jsonFile, err := os.Open(filepath.Join(ProjectDirectoryPath, CONFIG_FILE_NAME))
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	json.Unmarshal(byteValue, &goloadConfig)

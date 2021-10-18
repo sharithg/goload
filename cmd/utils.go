@@ -2,6 +2,7 @@ package cmd
 
 import "os"
 
+// check if a given path exists
 func PathExits(path string) (bool, error) {
 	fileOrDir, err := os.Stat(path)
 	if err == nil {

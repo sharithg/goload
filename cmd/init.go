@@ -34,6 +34,7 @@ var initCmd = &cobra.Command{
 		nameFlag, _ := cmd.Flags().GetString("name")
 		projectDirFlag, _ := cmd.Flags().GetString("dir")
 
+		// check if the project dir is valid
 		if projectDirFlag != "" {
 			exists, err := PathExits(projectDirFlag)
 
@@ -43,13 +44,17 @@ var initCmd = &cobra.Command{
 			}
 		}
 
+		// check if a project is already initialized in this directory
 		if config.DoesAttributeAndFileExist(projectDirFlag, "imageId") {
 			fmt.Fprintln(os.Stderr, "project already exists")
 			os.Exit(1)
 		}
+
+		// build the docker image
 		dockerImageName, projectDir := docker.BuildDocker(projectDirFlag, nameFlag)
+
+		// write to a config file
 		config.WriteInitialConfig(dockerImageName, projectDir)
-		// config.GetDockerImageName()
 	},
 }
 
