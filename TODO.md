@@ -7,3 +7,5 @@
 - [ ] Set a max replicas limit. (Easy)
 - [x] Support for shorthand flags (Easy)
 - [ ] Ideally append to the `globals.RUNNING_IDS` in the `RunDocker` function. This would handle case where a `SIGTERM` is triggered while the docker processes are being spawned, so the cleanup will not catch the previously spawned processes because the `globals.RUNNING_IDS` are appended after all the docker processes have been spawned. This would require go routine synchronization with a mutex lock. (Medium)
+- [ ] Support for detached mode (Hard)
+- [ ] Rebuild works with no downtime (Hard)
