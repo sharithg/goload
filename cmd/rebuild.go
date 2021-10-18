@@ -10,7 +10,7 @@ import (
 var rebuildCmd = &cobra.Command{
 	Use:   "rebuild",
 	Short: "Rebuild your project",
-	Long:  `Rebuilds your project and re runs it`,
+	Long:  `Rebuilds your project. Run this if you make any changes and you wish to rerun.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
 		docker.RebuildDocker()

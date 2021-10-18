@@ -17,8 +17,8 @@ var replicas string
 
 var runCmd = &cobra.Command{
 	Use:   "run",
-	Short: "run a initialized project",
-	Long:  `Runs the existing project witht he given parameters`,
+	Short: "Run a initialized project",
+	Long:  `Runs the existing project with the given parameters`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		replicasFlag, _ := cmd.Flags().GetString("replicas")
 

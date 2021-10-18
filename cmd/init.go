@@ -18,8 +18,7 @@ var projectDir string
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize a new load balancer",
-	Long: `Initializes a new load balancer by building the docker images and
-			exposing the ports`,
+	Long:  `Initializes a new load balancer by building the docker image`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		nameFlag, _ := cmd.Flags().GetString("name")
 
