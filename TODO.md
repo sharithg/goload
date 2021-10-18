@@ -10,4 +10,4 @@
 - [ ] Support for detached mode (Hard)
 - [ ] Rebuild works with no downtime (Hard)
 - [ ] Support for specifying start port and port range of the load balancer. Ex: `--port 3000+` (increment port 3000 by 1 upto the number of replicas) or `--port 3000+5` (increment port 3000 by 5 upto the number of replicas) (Medium)
-- [ ] Parse Dockerfile to figure out what port is being exposed. If none show an error. (Easy)
+- [ ] Parse Dockerfile to figure out what port is being exposed. If none show an error. Also save this to config (Easy)
