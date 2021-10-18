@@ -43,7 +43,7 @@ var initCmd = &cobra.Command{
 			}
 		}
 
-		if config.DoesAttributeAndFileExist("imageId") {
+		if config.DoesAttributeAndFileExist(projectDirFlag, "imageId") {
 			fmt.Fprintln(os.Stderr, "project already exists")
 			os.Exit(1)
 		}

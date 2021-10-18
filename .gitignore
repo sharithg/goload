@@ -15,3 +15,7 @@
 # vendor/
 
 testdocker/
+
+.goload.json
+
+goload
