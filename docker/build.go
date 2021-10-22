@@ -53,6 +53,7 @@ func RebuildDocker() string {
 	goloadConfig := config.LoadConfig()
 	projectDir := goloadConfig.GetProjectDir()
 
+	// get the Dockerfile path
 	dockerfilePath := filepath.Join(projectDir, "Dockerfile")
 
 	dockerArgs := fmt.Sprintf("docker build -f %s -t %s %s", dockerfilePath, goloadConfig.ImageId, projectDir)

@@ -56,7 +56,6 @@ var initCmd = &cobra.Command{
 		dockerImageName, projectDir := docker.BuildDocker(projectDirFlag, nameFlag)
 
 		// Create config struct
-
 		initialConfig := config.GoloadConfig{
 			ProjectName: nameFlag,
 			ImageId:     dockerImageName,

@@ -26,10 +26,12 @@ func GetExposedPort(projectDir string) int {
 
 	// Read through 'tokens' until an EOF is encountered.
 	for sc.Scan() {
+		// Look for EXPOSED string
 		res := strings.Contains(sc.Text(), "EXPOSE")
 		if res {
 			words := strings.Fields(sc.Text())
 			if len(words) == 2 {
+				// We found EXPOSED <port num>
 				intVar, _ := strconv.Atoi(words[1])
 				return intVar
 			}
@@ -40,6 +42,7 @@ func GetExposedPort(projectDir string) int {
 		log.Fatal(err)
 	}
 
+	// We did not found EXPOSED <port num> exit and show error message
 	yellow := color.New(color.FgYellow).SprintFunc()
 	errorMessage := fmt.Sprintf("Could not find exposed port, please make sure you have %s in your Dockerfile", yellow("EXPOSE <port number>"))
 	utils.FatalError(errorMessage)

@@ -38,9 +38,12 @@ var runCmd = &cobra.Command{
 		replicasFlag, _ := cmd.Flags().GetString("replicas")
 		serverList := []string{}
 		goloadConfig := config.LoadConfig()
+
 		numberOfReplicas, _ := strconv.Atoi(replicasFlag)
+
 		// run numberOfReplicas docker containers
 		portList := docker.RunMultipleDocker(numberOfReplicas)
+
 		for _, port := range portList {
 			serverList = append(serverList, fmt.Sprintf("http://localhost:%s", port))
 			// append the image ids to the RUNNING_IDS global, which will be use in the cleanup
