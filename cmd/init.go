@@ -49,11 +49,23 @@ var initCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Extract port
+		exposedPort := docker.GetExposedPort(projectDir)
+
 		// build the docker image
 		dockerImageName, projectDir := docker.BuildDocker(projectDirFlag, nameFlag)
 
+		// Create config struct
+
+		initialConfig := config.GoloadConfig{
+			ProjectName: nameFlag,
+			ImageId:     dockerImageName,
+			ProjectDir:  projectDir,
+			ExposedPort: exposedPort,
+		}
+
 		// write to a config file
-		config.WriteInitialConfig(dockerImageName, projectDir)
+		initialConfig.Write()
 	},
 }
 

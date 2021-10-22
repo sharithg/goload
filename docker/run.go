@@ -12,7 +12,9 @@ import (
 // runs a individual docker container given an id
 func RunDocker(port int) {
 
-	imageId := config.GetDockerImageName()
+	goloadConfig := config.LoadConfig()
+
+	imageId := goloadConfig.ImageId
 
 	dockerCmd := fmt.Sprintf("docker run -p %d:6000 -d --name %s %s", port, fmt.Sprintf("%s-%d", imageId, port), imageId)
 

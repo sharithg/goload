@@ -4,10 +4,16 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+
+	"github.com/fatih/color"
 )
 
 func FatalError(message string) {
-	fmt.Fprintln(os.Stderr, message)
+	red := color.New(color.FgRed).SprintFunc()
+
+	errorMessage := fmt.Sprintf("%s: %s", red("Error"), message)
+
+	fmt.Fprintln(os.Stderr, errorMessage)
 	os.Exit(1)
 }
 

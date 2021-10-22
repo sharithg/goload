@@ -10,10 +10,12 @@ import (
 )
 
 // Builds a docker image given a name
-func BuildDocker(projectDir string, dockerImageName string) (string, string) {
+func BuildDocker(projectDir string, name string) (string, string) {
 
 	dockerBuildDir := "."
 	dockerFileBuildPath := ""
+
+	dockerImageName := name + "-" + utils.RandomId(10)
 
 	// if the project dir is not empty update params to use this directory
 	if projectDir != "" {
@@ -48,12 +50,12 @@ func BuildDocker(projectDir string, dockerImageName string) (string, string) {
 // rebuilds a existing docker image
 func RebuildDocker() string {
 
-	dockerImageName := config.GetDockerImageName()
-	projectDir := config.GetProjectDir()
+	goloadConfig := config.LoadConfig()
+	projectDir := goloadConfig.GetProjectDir()
 
 	dockerfilePath := filepath.Join(projectDir, "Dockerfile")
 
-	dockerArgs := fmt.Sprintf("docker build -f %s -t %s %s", dockerfilePath, dockerImageName, projectDir)
+	dockerArgs := fmt.Sprintf("docker build -f %s -t %s %s", dockerfilePath, goloadConfig.ImageId, projectDir)
 
 	fmt.Print(dockerArgs + "\n")
 
@@ -75,6 +77,6 @@ func RebuildDocker() string {
 
 	fmt.Println("out:", outb.String(), "err:", errb.String())
 
-	return dockerImageName
+	return goloadConfig.ImageId
 
 }

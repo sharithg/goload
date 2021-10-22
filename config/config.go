@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"goload/utils"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -12,14 +11,16 @@ import (
 const CONFIG_FILE_NAME = ".goload.json"
 
 type GoloadConfig struct {
-	ImageId    string `json:"imageId"`
-	ProjectDir string `json:"projectDir"`
+	ProjectName string `json:"projectName"`
+	ImageId     string `json:"imageId"`
+	ProjectDir  string `json:"projectDir"`
+	ExposedPort int    `json:"exposedPort"`
 }
 
 var ProjectDirectoryPath = ""
 
 // get the image name in the project directory
-func GetDockerImageName() string {
+func LoadConfig() GoloadConfig {
 
 	var goloadConfig GoloadConfig
 
@@ -37,7 +38,7 @@ func GetDockerImageName() string {
 	defer jsonFile.Close()
 
 	// return the image name
-	return goloadConfig.ImageId
+	return goloadConfig
 }
 
 // check if a attribute exists and that the config file exists
@@ -57,36 +58,22 @@ func DoesAttributeAndFileExist(projectDir string, name string) bool {
 	ProjectDirectoryPath = projectDir
 
 	// if image name exists attribute and file exist
-	return GetDockerImageName() != ""
+	return LoadConfig().ImageId != ""
 }
 
 // write the initial goload config file
-func WriteInitialConfig(name string, projectDir string) {
-	dockerImageName := name + "-" + utils.RandomId(10)
+func (gc *GoloadConfig) Write() {
 
-	data := GoloadConfig{ImageId: dockerImageName, ProjectDir: projectDir}
+	data := *gc
 
 	file, _ := json.MarshalIndent(data, "", " ")
 
-	_ = ioutil.WriteFile(filepath.Join(projectDir, CONFIG_FILE_NAME), file, 0644)
+	_ = ioutil.WriteFile(filepath.Join(gc.ProjectDir, CONFIG_FILE_NAME), file, 0644)
 
-	ProjectDirectoryPath = projectDir
+	ProjectDirectoryPath = gc.ProjectDir
 }
 
 // get the current project directory
-func GetProjectDir() string {
-	var goloadConfig GoloadConfig
-
-	jsonFile, err := os.Open(filepath.Join(ProjectDirectoryPath, CONFIG_FILE_NAME))
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &goloadConfig)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer jsonFile.Close()
-
-	return goloadConfig.ProjectDir
+func (gc *GoloadConfig) GetProjectDir() string {
+	return gc.ProjectDir
 }
