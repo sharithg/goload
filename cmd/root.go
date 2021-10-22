@@ -20,7 +20,6 @@ var rootCmd = &cobra.Command{
 	// },
 	Run: func(cmd *cobra.Command, args []string) {
 		// Do Stuff Here
-		fmt.Print(args)
 	},
 }
 

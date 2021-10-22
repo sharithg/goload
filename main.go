@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"goload/cmd"
 	"goload/docker"
 	"goload/globals"
@@ -9,10 +8,12 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+
+	"github.com/fatih/color"
 )
 
 func cleanup() {
-	fmt.Println("cleanup")
+	color.Green("\nGracefully stopping...")
 
 	var wg sync.WaitGroup
 
@@ -21,13 +22,13 @@ func cleanup() {
 	// create a waitgroup for the number of running containers
 	wg.Add(runningIdsLength)
 
-	for _, element := range globals.RUNNING_IDS {
+	for _, id := range globals.RUNNING_IDS {
 
 		// concurrently stop the containers
-		go func(elem string) {
-			docker.StopDocker(elem)
+		go func(id string) {
+			docker.StopDocker(id)
 			wg.Done()
-		}(element)
+		}(id)
 	}
 	wg.Wait()
 }

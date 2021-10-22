@@ -17,7 +17,7 @@ func StopDocker(id string) {
 	dockerExec := exec.Command("/bin/sh", "-c", dockerCmd)
 
 	var outb, errb bytes.Buffer
-	dockerExec.Stdout = os.Stdout
+	// dockerExec.Stdout = os.Stdout
 	dockerExec.Stderr = os.Stderr
 
 	err := dockerExec.Run()

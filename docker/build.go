@@ -57,8 +57,6 @@ func RebuildDocker() string {
 
 	dockerArgs := fmt.Sprintf("docker build -f %s -t %s %s", dockerfilePath, goloadConfig.ImageId, projectDir)
 
-	fmt.Print(dockerArgs + "\n")
-
 	fmt.Println("Building docker image...")
 
 	dockerExec := exec.Command("/bin/sh", "-c", dockerArgs)

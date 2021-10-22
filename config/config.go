@@ -25,7 +25,7 @@ func LoadConfig() GoloadConfig {
 	var goloadConfig GoloadConfig
 
 	// open the json file
-	jsonFile, err := os.Open(filepath.Join(ProjectDirectoryPath, CONFIG_FILE_NAME))
+	jsonFile, err := os.Open(filepath.Join(CONFIG_FILE_NAME))
 
 	// read bytes and unmarshall
 	byteValue, _ := ioutil.ReadAll(jsonFile)
@@ -68,7 +68,7 @@ func (gc *GoloadConfig) Write() {
 
 	file, _ := json.MarshalIndent(data, "", " ")
 
-	_ = ioutil.WriteFile(filepath.Join(gc.ProjectDir, CONFIG_FILE_NAME), file, 0644)
+	_ = ioutil.WriteFile(filepath.Join(CONFIG_FILE_NAME), file, 0644)
 
 	ProjectDirectoryPath = gc.ProjectDir
 }
