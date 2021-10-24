@@ -1,10 +1,9 @@
 package docker
 
 import (
-	"bytes"
 	"fmt"
 	"goload/config"
-	"os"
+	"goload/utils"
 	"os/exec"
 	"sync"
 )
@@ -19,16 +18,10 @@ func RunDocker(port int, mapPort int) {
 	dockerCmd := fmt.Sprintf("docker run -p %d:%d -d --name %s %s", port, mapPort, fmt.Sprintf("%s-%d", imageId, port), imageId)
 
 	dockerExec := exec.Command("/bin/sh", "-c", dockerCmd)
-
-	var outb, errb bytes.Buffer
-	// dockerExec.Stdout = os.Stdout
-	dockerExec.Stderr = os.Stderr
-
 	err := dockerExec.Run()
 
 	if err != nil {
-		fmt.Println("out:", outb.String(), "err:", errb.String())
-		panic(fmt.Sprintf("%s", err))
+		utils.FatalError("Cannot connect to docker daemon")
 	}
 }
 

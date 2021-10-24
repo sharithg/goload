@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"goload/config"
 	"goload/docker"
 	"goload/globals"
 	"goload/loadbalancer"
+	"goload/utils"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -23,12 +23,12 @@ var runCmd = &cobra.Command{
 		replicasFlag, _ := cmd.Flags().GetString("replicas")
 
 		if replicasFlag == "" {
-			return errors.New("requires a replicas argument")
+			utils.FatalError("requires a replicas argument")
 		}
 
-		_, err := strconv.Atoi(replicasFlag)
-		if err != nil {
-			return errors.New("replicasFlag must be a integer")
+		num, err := strconv.Atoi(replicasFlag)
+		if err != nil || num < 1 || num > 250 {
+			utils.FatalError("replicas must be a number between 1 and 250")
 		}
 
 		return nil
@@ -39,7 +39,11 @@ var runCmd = &cobra.Command{
 		serverList := []string{}
 		goloadConfig := config.LoadConfig()
 
-		numberOfReplicas, _ := strconv.Atoi(replicasFlag)
+		numberOfReplicas, err := strconv.Atoi(replicasFlag)
+
+		if err != nil {
+			utils.FatalError("replicas must be a integer below 250")
+		}
 
 		// run numberOfReplicas docker containers
 		portList := docker.RunMultipleDocker(numberOfReplicas)
